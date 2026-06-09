@@ -1,0 +1,24 @@
+services:
+  # ── Production (deploys from: main branch) ─────────────────────────────────
+  - type: web
+    name: gutenberg-books-api
+    runtime: python
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # Set manually in Render dashboard — never commit secrets
+    autoDeploy: true
+
+  # ── Staging / Dev (deploys from: develop branch) ───────────────────────────
+  - type: web
+    name: gutenberg-books-api-dev
+    runtime: python
+    branch: develop
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # Use a separate dev database URL
+    autoDeploy: true

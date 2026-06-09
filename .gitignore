@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+myenv/
+venv/
+.venv/
+env/
+
+# Environment secrets
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database dump and archives
+gutendex.dump
+gutenberg.zip
+*.dump
+*.zip
+
+# Test caches
+.pytest_cache/
+
