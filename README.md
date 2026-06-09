@@ -3,7 +3,7 @@
 A RESTful API to query and filter books from the [Project Gutenberg](https://www.gutenberg.org/) dataset.
 Books are sorted by popularity (download count) and paginated at 25 per page.
 
-[![CI](https://github.com/rajneeshkumar711/gutenberg-books-api/actions/workflows/ci.yml/badge.svg)](https://github.com/rajneeshkumar711/gutenberg-books-api/actions/workflows/ci.yml)
+
 
 ---
 
@@ -204,23 +204,6 @@ curl "http://localhost:8000/books?page=2"
 curl "http://localhost:8000/books?languages=en&author=dickens&page=2"
 ```
 
-### Using Python requests
-
-```python
-import requests
-
-BASE = "http://localhost:8000"
-
-# All books
-r = requests.get(f"{BASE}/books")
-print(r.json()["count"], "total books")
-
-# Filter by author + language
-r = requests.get(f"{BASE}/books", params={"author": "shakespeare", "languages": "en"})
-for book in r.json()["results"]:
-    print(book["title"])
-```
-
 ### Using the interactive Swagger UI
 1. Open `http://localhost:8000/docs`
 2. Click **GET /books** → **Try it out**
@@ -235,23 +218,6 @@ for book in r.json()["results"]:
 pytest tests/ -v
 ```
 
-Expected output:
-
-```
-tests/test_api.py::test_root_endpoint               PASSED
-tests/test_api.py::test_health_check                PASSED
-tests/test_api.py::test_list_books_default          PASSED
-tests/test_api.py::test_filter_by_gutenberg_ids     PASSED
-tests/test_api.py::test_filter_by_languages         PASSED
-tests/test_api.py::test_filter_by_mime_type         PASSED
-tests/test_api.py::test_filter_by_topic             PASSED
-tests/test_api.py::test_filter_by_author            PASSED
-tests/test_api.py::test_filter_by_title             PASSED
-tests/test_api.py::test_multiple_filters_combined   PASSED
-tests/test_api.py::test_pagination                  PASSED
-
-======================== 11 passed ========================
-```
 
 ---
 
@@ -274,28 +240,3 @@ API will be available at **http://localhost:8000**
 docker build -t gutenberg-api .
 docker run -p 8000:8000 -e DATABASE_URL="postgresql://..." gutenberg-api
 ```
-
----
-
-## Deployment (Render)
-
-See [DEPLOY.md](./DEPLOY.md) for full step-by-step instructions.
-
-**Quick summary:**
-1. Push to GitHub (`main` branch → production, `develop` branch → staging)
-2. Create a PostgreSQL service on Render
-3. Restore the dump: `pg_restore --no-owner -d <EXTERNAL_DB_URL> gutendex.dump`
-4. Create a Web Service on Render, set `DATABASE_URL` env var
-5. Every push auto-deploys; every PR runs CI tests via GitHub Actions
-
----
-
-## Environment Variables
-
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `DATABASE_URL` | **Yes** | — | PostgreSQL connection string |
-| `HOST` | No | `0.0.0.0` | Server bind host |
-| `PORT` | No | `8000` | Server port |
-
-Copy `.env.example` to `.env` for local development. **Never commit `.env`** — it is gitignored.
